@@ -1,0 +1,13 @@
+Program: ZFIRE002
+
+ZFIRE002 is a global review of the budget's data
+
+It begins with a call of a perform named "get_data" that is used to retrieve all the data we do need for our processing instructions
+in this form it retrieve data from /trilog/budget (into lt_bud1), /trilog/oda_cons (lt_oda_cons), mov_fatt (lt_mov_fatt), moviment (lt_tmov).
+This data are retrieved using conditions that mathces with other tables like ekko, bkpf, tvaut,zmbt002 and others.
+in the form "merge_out_tables" the program merge all the data that he get, in one table (lt_output) that is the table that contains all the 
+cross data from the tables above.
+
+in the form named populate structs the progrm intialize the strutcture of the fieldcat. in the form "create_layout" and "prepare_fieldcat" it sets all 
+the informations of the layout of the output fieldcat, ag. putting the fields that are empty in no-out mode (it won't the display in the fcat all the blank fields)
+in the display_alv form we have the output table displayed after the insertion of the data.
