@@ -1,0 +1,54 @@
+*&---------------------------------------------------------------------*
+*& Report  ZPROGRAMMINO
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+
+REPORT  ZPROGRAMMINO.
+
+TYPE-POOLS: slis.
+
+tables : dd03m.
+data: begin of lt_dd03m OCCURS 0,
+  tabname type tabname,
+  fieldname type fieldname,
+  domname type domname,
+  ddtext type ddtext.
+data: end of lt_dd03m.
+
+data: ls_dd03m like line of  lt_dd03m.
+
+DATA : GR_TABLE TYPE REF TO CL_SALV_TABLE.
+
+
+parameters: p_tabn(10) type c.
+
+if p_tabn is INITIAL.
+  MESSAGE 'Scrivere il  nome di una tabella' TYPE 'I'.
+else.
+
+select * from dd03m into CORRESPONDING FIELDS OF TABLE
+lt_dd03m where
+tabname = p_tabn and ddlanguage = sy-langu.
+  sort lt_dd03m.
+  delete ADJACENT DUPLICATES FROM lt_dd03m.
+
+CALL METHOD CL_SALV_TABLE=>FACTORY
+*  EXPORTING
+*    LIST_DISPLAY   = IF_SALV_C_BOOL_SAP=>FALSE
+*    R_CONTAINER    =
+*    CONTAINER_NAME =
+  IMPORTING
+    R_SALV_TABLE   = GR_TABLE
+  CHANGING
+    T_TABLE        = lt_dd03m[]
+    .
+* CATCH CX_SALV_MSG .
+*ENDTRY.
+.
+
+CALL METHOD GR_TABLE->DISPLAY
+  .
+endif.
